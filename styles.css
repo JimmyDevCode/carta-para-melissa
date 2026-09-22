@@ -276,6 +276,34 @@ body.locked { overflow: hidden; height: 100vh; }
   z-index: 2;
 }
 .photo-frame img.is-empty { opacity: 0; }
+.photo-loader {
+  position: absolute;
+  z-index: 3;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 3px solid rgba(74,69,62,.22);
+  border-top-color: rgba(74,69,62,.8);
+  animation: photo-spin .8s linear infinite;
+  display: none;
+}
+.photo-frame.is-loading { position: relative; }
+.photo-frame.is-loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(100deg, #e7ddcd 30%, #f3ecdd 50%, #e7ddcd 70%);
+  background-size: 220% 100%;
+  animation: photo-shimmer 1.3s ease-in-out infinite;
+}
+.photo-frame.is-loading .photo-loader { display: block; }
+.photo-frame.is-loading .photo-placeholder { margin-top: 52px; }
+@keyframes photo-spin { to { transform: rotate(360deg); } }
+@keyframes photo-shimmer {
+  0% { background-position: 180% 0; }
+  100% { background-position: -80% 0; }
+}
 .photo-placeholder {
   font-size: .8rem;
   letter-spacing: .18em;
@@ -294,33 +322,86 @@ body.locked { overflow: hidden; height: 100vh; }
 }
 .photo-frame--large { aspect-ratio: 3 / 4; }
 
-/* ===== Polaroids ===== */
-.polaroids {
-  margin-top: 2.6rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(1rem, 5vw, 2rem) clamp(.8rem, 4vw, 1.6rem);
+/* ===== Cuaderno (hojas que se pasan) ===== */
+.notebook {
+  margin: 2.8rem auto 0;
+  width: min(420px, 100%);
 }
-.polaroid {
+.notebook__spiral {
+  position: relative;
+  height: 0;
+  z-index: 20;
+}
+.notebook__spiral::before { content: none; }
+.notebook__spiral span,
+.notebook__spiral::after { display: none; }
+.notebook__stack {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+}
+.sheet {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .45s var(--ease);
+}
+.sheet.is-active { opacity: 1; visibility: visible; }
+.sheet__face {
+  position: absolute;
+  inset: 0;
   background: #fffdf8;
-  padding: .7rem .7rem 1.1rem;
-  box-shadow: 0 18px 40px -20px rgba(0,0,0,.45);
-  transform: rotate(var(--tilt, 0deg));
-  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+  padding: .8rem .8rem 1.15rem;
+  box-shadow: 0 22px 46px -22px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
 }
-.polaroid .photo-frame { aspect-ratio: 1 / 1; background: #e7ddcd; }
-.polaroid figcaption {
+.sheet__back { display: none; }
+.sheet__front .photo-frame {
+  flex: 1;
+  aspect-ratio: auto;
+  background: #e7ddcd;
+}
+.sheet__date {
   font-family: var(--serif);
   font-style: italic;
-  font-size: 1rem;
+  font-size: 1.02rem;
   text-align: center;
   color: #4a453e;
   margin-top: .7rem;
 }
-.polaroid:hover {
-  transform: rotate(0deg) translateY(-6px) scale(1.02);
-  box-shadow: 0 30px 60px -22px rgba(0,0,0,.55);
-  z-index: 3;
+.notebook__nav {
+  position: relative;
+  z-index: 30;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+}
+.notebook__btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.35);
+  background: rgba(255,253,248,.92);
+  color: #2a2731;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 6px 16px -8px rgba(0,0,0,.5);
+  transition: transform .3s var(--ease), background .3s var(--ease);
+}
+.notebook__btn:hover:not(:disabled) { transform: scale(1.08); background: #fffdf8; }
+.notebook__btn:disabled { opacity: .35; cursor: default; }
+.notebook__indicator {
+  font-size: .82rem;
+  letter-spacing: .16em;
+  font-weight: 600;
+  color: #3a352e;
+  min-width: 4.5rem;
+  text-align: center;
 }
 
 /* =========================================================
@@ -381,60 +462,73 @@ body.locked { overflow: hidden; height: 100vh; }
 /* =========================================================
    SECCIÓN 6 — SOUNDTRACK
    ========================================================= */
-.playlist { list-style: none; margin-top: 1rem; }
-.track {
+.song {
+  margin: 2rem auto 0;
+  max-width: 440px;
   display: flex;
-  gap: 1.2rem;
-  align-items: baseline;
-  padding: 1.5rem 0;
-  border-top: 1px solid rgba(246,241,233,.12);
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.4rem;
 }
-.track:last-of-type { border-bottom: 1px solid rgba(246,241,233,.12); }
-.track__index {
+.song__cover {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 30% 30%, #3a3550, #17151b);
+  box-shadow: 0 30px 60px -28px rgba(0,0,0,.8), inset 0 0 0 1px rgba(201,168,106,.35);
+}
+.song__cover::after {
+  content: "";
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--bg, #111014);
+  box-shadow: inset 0 0 0 1px rgba(246,241,233,.15);
+  position: absolute;
+}
+.song__cover { position: relative; }
+.song__note { font-size: 3rem; color: var(--gold); line-height: 1; }
+.song__name { font-family: var(--serif); font-size: 1.7rem; font-weight: 500; }
+.song__artist {
+  font-size: .82rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: .3rem;
+}
+.song__note-text {
   font-family: var(--serif);
-  font-size: 1.4rem;
-  color: var(--gold);
-  min-width: 2ch;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: rgba(246,241,233,.82);
+  margin-top: .8rem;
 }
-.track__name { font-size: 1.1rem; font-weight: 500; letter-spacing: .01em; }
-.track__artist { font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: .15rem; }
-.track__note { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: rgba(246,241,233,.8); margin-top: .55rem; }
+.song__player { width: 100%; max-width: 360px; margin-top: .4rem; }
 
 /* =========================================================
    SECCIÓN 7 — PLANES
    ========================================================= */
-.checklist { list-style: none; margin-top: 1rem; max-width: 520px; }
-.check {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-family: var(--serif);
-  font-size: clamp(1.3rem, 5vw, 1.7rem);
-  padding: 1rem 0;
-  border-bottom: 1px dashed rgba(35,32,29,.18);
-  cursor: pointer;
-  transition: color .3s var(--ease);
-}
-.box {
-  flex: 0 0 auto;
-  width: 22px; height: 22px;
-  border: 1.5px solid var(--wine);
-  border-radius: 4px;
+.wishes { list-style: none; margin-top: 1.2rem; max-width: 560px; }
+.wish {
   position: relative;
-  transition: background .3s var(--ease);
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 4.4vw, 1.55rem);
+  line-height: 1.5;
+  padding: 1.05rem 0 1.05rem 2rem;
+  border-bottom: 1px dashed rgba(35,32,29,.18);
 }
-.check.done .box { background: var(--wine); }
-.check.done .box::after {
-  content: "✓";
+.wish::before {
+  content: "❤";
   position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  font-family: var(--sans);
-  font-size: .85rem;
+  left: 0;
+  top: 1.15rem;
+  font-size: 1rem;
+  color: var(--wine);
 }
-.check.done { color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(122,31,43,.4); }
+.wish:last-child { border-bottom: none; }
 
 /* =========================================================
    SECCIÓN FINAL
@@ -514,7 +608,7 @@ body.locked { overflow: hidden; height: 100vh; }
 
 /* Desktop refinements */
 @media (min-width: 720px) {
-  .polaroids { grid-template-columns: repeat(3, 1fr); }
+  .notebook { width: min(460px, 100%); }
   .feature-photo { max-width: 460px; margin-left: auto; margin-right: auto; }
 }
 

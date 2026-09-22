@@ -70,7 +70,7 @@
         <figure class="feature-photo reveal">
           <div class="photo-frame photo-frame--large">
             <!-- Reemplaza el src por vuestra foto -->
-            <img src="img/foto-principal.jpg" alt="Nuestra primera foto juntos"
+            <img src="principal/foto-principal.jpg" alt="Nuestra primera foto juntos"
                  onerror="this.classList.add('is-empty')" />
             <span class="photo-placeholder">Coloca aquí<br>vuestra foto</span>
           </div>
@@ -86,37 +86,22 @@
     <section class="section section--gallery" data-theme="beige">
       <div class="wrap">
         <p class="chapter-tag reveal">Capítulo 02</p>
-        <h2 class="chapter-title reveal">Nuestros pequeños momentos</h2>
+        <h2 class="chapter-title reveal">Nuestro cuaderno de recuerdos</h2>
         <p class="body body--center reveal">
           “Porque probablemente algún día olvidemos qué hicimos exactamente cada día,
           pero quiero recordar cómo nos sentimos estando juntos.”
         </p>
 
-        <div class="polaroids">
-          <figure class="polaroid reveal" style="--tilt:-4deg">
-            <div class="photo-frame"><img src="img/momento-1.jpg" alt="Momento 1" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 1</span></div>
-            <figcaption>Un momento nuestro</figcaption>
-          </figure>
-          <figure class="polaroid reveal" style="--tilt:3deg">
-            <div class="photo-frame"><img src="img/momento-2.jpg" alt="Momento 2" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 2</span></div>
-            <figcaption>Un momento nuestro</figcaption>
-          </figure>
-          <figure class="polaroid reveal" style="--tilt:-2deg">
-            <div class="photo-frame"><img src="img/momento-3.jpg" alt="Momento 3" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 3</span></div>
-            <figcaption>Un momento nuestro</figcaption>
-          </figure>
-          <figure class="polaroid reveal" style="--tilt:4deg">
-            <div class="photo-frame"><img src="img/momento-4.jpg" alt="Momento 4" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 4</span></div>
-            <figcaption>Un momento nuestro</figcaption>
-          </figure>
-          <figure class="polaroid reveal" style="--tilt:-3deg">
-            <div class="photo-frame"><img src="img/momento-5.jpg" alt="Momento 5" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 5</span></div>
-            <figcaption>Un momento nuestro</figcaption>
-          </figure>
-          <figure class="polaroid reveal" style="--tilt:2deg">
-            <div class="photo-frame"><img src="img/momento-6.jpg" alt="Momento 6" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 6</span></div>
-            <figcaption>Un momento nuestro</figcaption>
-          </figure>
+        <!-- Cuaderno: las hojas se pasan una a una, ordenadas por fecha.
+             Edita las fotos y fechas en el arreglo "photos" de script.js -->
+        <div class="notebook reveal">
+          <div class="notebook__spiral" aria-hidden="true"></div>
+          <div id="notebookStack" class="notebook__stack" aria-live="polite"></div>
+          <div class="notebook__nav">
+            <button id="pagePrev" class="notebook__btn" type="button" aria-label="Hoja anterior">‹</button>
+            <span id="pageIndicator" class="notebook__indicator"></span>
+            <button id="pageNext" class="notebook__btn" type="button" aria-label="Hoja siguiente">›</button>
+          </div>
         </div>
       </div>
     </section>
@@ -150,58 +135,35 @@
     <!-- SECCIÓN 6 — SOUNDTRACK -->
     <section class="section section--music" data-theme="dark">
       <div class="wrap">
-        <h2 class="chapter-title reveal">Si nuestra historia tuviera soundtrack…</h2>
-        <ul class="playlist">
-          <li class="track reveal">
-            <span class="track__index">01</span>
-            <div class="track__body">
-              <p class="track__name">[ Nombre de la canción ]</p>
-              <p class="track__artist">[ Artista ]</p>
-              <p class="track__note">“Porque me recuerda a aquella vez que…”</p>
-            </div>
-          </li>
-          <li class="track reveal">
-            <span class="track__index">02</span>
-            <div class="track__body">
-              <p class="track__name">[ Nombre de la canción ]</p>
-              <p class="track__artist">[ Artista ]</p>
-              <p class="track__note">“Porque suena a nosotros cuando…”</p>
-            </div>
-          </li>
-          <li class="track reveal">
-            <span class="track__index">03</span>
-            <div class="track__body">
-              <p class="track__name">[ Nombre de la canción ]</p>
-              <p class="track__artist">[ Artista ]</p>
-              <p class="track__note">“Porque quiero dedicártela por…”</p>
-            </div>
-          </li>
-          <li class="track reveal">
-            <span class="track__index">04</span>
-            <div class="track__body">
-              <p class="track__name">[ Nombre de la canción ]</p>
-              <p class="track__artist">[ Artista ]</p>
-              <p class="track__note">“Porque siempre que la escucho pienso en…”</p>
-            </div>
-          </li>
-        </ul>
-        <p class="hint-note reveal">Reemplaza estos espacios con nuestras canciones.</p>
+        <h2 class="chapter-title reveal">Nuestra canción</h2>
+        <figure class="song reveal">
+          <div class="song__cover" aria-hidden="true"><span class="song__note">♪</span></div>
+          <figcaption class="song__meta">
+            <p class="song__name">Mi Bendición</p>
+            <p class="song__artist">Juan Luis Guerra</p>
+            <p class="song__note-text">“Porque me recuerda a nosotros.”</p>
+          </figcaption>
+          <audio class="song__player" controls preload="none">
+            <source src="musica/Juan Luis Guerra - Mi Bendicion.mp3" type="audio/mpeg" />
+            Tu navegador no puede reproducir el audio.
+          </audio>
+        </figure>
       </div>
     </section>
 
     <!-- SECCIÓN 7 — PLANES -->
     <section class="section section--plans" data-theme="beige">
       <div class="wrap">
-        <h2 class="chapter-title reveal">Capítulos que todavía nos faltan</h2>
-        <ul class="checklist">
-          <li class="check reveal"><span class="box" aria-hidden="true"></span>Viajar juntos</li>
-          <li class="check reveal"><span class="box" aria-hidden="true"></span>Ver un amanecer</li>
-          <li class="check reveal"><span class="box" aria-hidden="true"></span>Conocer un lugar nuevo</li>
-          <li class="check reveal"><span class="box" aria-hidden="true"></span>Hacer muchas fotos</li>
-          <li class="check reveal"><span class="box" aria-hidden="true"></span>Tener una aventura improvisada</li>
-          <li class="check reveal"><span class="box" aria-hidden="true"></span>Crear recuerdos que todavía no existen</li>
+        <h2 class="chapter-title reveal">Lo que quiero seguir viviendo contigo</h2>
+        <ul class="wishes">
+          <li class="wish reveal">Viajar juntos y perdernos en ciudades que todavía no conocemos.</li>
+          <li class="wish reveal">Vivir aventuras improvisadas, de esas que se deciden a última hora.</li>
+          <li class="wish reveal">Ver amaneceres y atardeceres en lugares nuevos.</li>
+          <li class="wish reveal">Reírnos hasta que duela la barriga, una y mil veces más.</li>
+          <li class="wish reveal">Coleccionar fotos, canciones y recuerdos que solo entendamos nosotros.</li>
+          <li class="wish reveal">Y seguir eligiéndonos cada día, en lo simple y en lo extraordinario.</li>
         </ul>
-        <p class="hint-note reveal">Los iremos marcando juntos. ✓</p>
+        <p class="hint-note reveal">Esto apenas empieza. ❤</p>
       </div>
     </section>
 
@@ -225,6 +187,8 @@
 
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js"></script>
+  <script src="photos.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

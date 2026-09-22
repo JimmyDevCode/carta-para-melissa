@@ -58,7 +58,6 @@
   /* ---- Secretos ---- */
   const secrets = [
     "Me haces sonreír más de lo que imaginas.",
-    "Sí, a veces me hago el frío. Pero tú sabes que no tanto. 😂",
     "Hay momentos contigo que ya guardé entre mis favoritos.",
     "Pienso en ti en momentos en los que ni te lo imaginas.",
     "Me gusta la calma que siento cuando estamos juntos.",
@@ -94,12 +93,152 @@
     return arr;
   }
 
-  /* ---- Checklist de planes ---- */
-  document.querySelectorAll(".check").forEach(function (item) {
-    item.addEventListener("click", function () {
-      item.classList.toggle("done");
+  /* ---- Cuaderno de recuerdos (hojas ordenadas por fecha) ---- */
+  initNotebook();
+
+  function initNotebook() {
+    const stack = document.getElementById("notebookStack");
+    const prevBtn = document.getElementById("pagePrev");
+    const nextBtn = document.getElementById("pageNext");
+    const indicator = document.getElementById("pageIndicator");
+    if (!stack) return;
+
+    // La lista de fotos vive en photos.js (window.PHOTOS). Acepta rutas o
+    // objetos { src, date } donde "date" es un respaldo manual opcional.
+    const raw = Array.isArray(window.PHOTOS) ? window.PHOTOS : [];
+    const photos = raw.map(function (p) {
+      return typeof p === "string" ? { src: p } : p;
     });
-  });
+    if (!photos.length) {
+      indicator.textContent = "Sin fotos";
+      prevBtn.disabled = nextBtn.disabled = true;
+      return;
+    }
+
+    indicator.textContent = "Cargando…";
+
+    // Solo leemos la fecha EXIF de todas (ligero). La conversión de HEIC para
+    // mostrar se hace de forma perezosa al navegar (ver ensureLoaded).
+    Promise.all(photos.map(resolveDate)).then(function (times) {
+      const items = photos.map(function (photo, i) {
+        return { src: photo.src, time: times[i] };
+      });
+      items.sort(function (a, b) { return a.time - b.time; });
+      buildNotebook(items);
+    });
+
+    function resolveDate(photo) {
+      // Respaldo: fecha manual (objeto) o la fecha detectada en el nombre.
+      const manual = photo.date ? new Date(photo.date + "T00:00:00").getTime() : NaN;
+      const fromName = parseDateFromName(photo.src);
+      const fallback = !isNaN(manual) ? manual : !isNaN(fromName) ? fromName : Infinity;
+      if (typeof window.exifr === "undefined") {
+        return Promise.resolve(fallback);
+      }
+      return window.exifr
+        .parse(photo.src, ["DateTimeOriginal", "CreateDate", "ModifyDate"])
+        .then(function (data) {
+          const exifDate = data && (data.DateTimeOriginal || data.CreateDate || data.ModifyDate);
+          return exifDate instanceof Date ? exifDate.getTime() : fallback;
+        })
+        .catch(function () { return fallback; });
+    }
+
+    // Detecta una fecha en el nombre: "2026-09-15", "2026_09_15" o "20260915".
+    function parseDateFromName(src) {
+      const name = src.split("/").pop();
+      const m = name.match(/(20\d{2})[-_.]?(\d{2})[-_.]?(\d{2})/);
+      if (!m) return NaN;
+      const y = +m[1], mo = +m[2], d = +m[3];
+      if (mo < 1 || mo > 12 || d < 1 || d > 31) return NaN;
+      return new Date(y, mo - 1, d).getTime();
+    }
+
+    // Devuelve una URL mostrable: convierte HEIC a JPEG solo cuando se pide.
+    function toDisplaySrc(src) {
+      const isHeic = /\.heic$/i.test(src);
+      if (!isHeic || typeof window.heic2any === "undefined") {
+        return Promise.resolve(src);
+      }
+      return fetch(src)
+        .then(function (r) { return r.blob(); })
+        .then(function (blob) {
+          return window.heic2any({ blob: blob, toType: "image/jpeg", quality: 0.82 });
+        })
+        .then(function (jpeg) { return URL.createObjectURL(jpeg); })
+        .catch(function () { return src; });
+    }
+
+    function buildNotebook(items) {
+      const total = items.length;
+      let current = 0;
+
+      items.forEach(function (item, i) {
+        const label = isFinite(item.time)
+          ? formatDate(new Date(item.time))
+          : "Fecha desconocida";
+        const sheet = document.createElement("div");
+        sheet.className = "sheet";
+        sheet.style.zIndex = String(total - i);
+        sheet.innerHTML =
+          '<div class="sheet__face sheet__front">' +
+            '<div class="photo-frame is-loading">' +
+              '<img alt="Recuerdo del ' + label +
+                '" onerror="this.classList.add(\'is-empty\')" />' +
+              '<span class="photo-loader" aria-hidden="true"></span>' +
+              '<span class="photo-placeholder">Cargando…</span>' +
+            "</div>" +
+            '<p class="sheet__date">' + label + "</p>" +
+          "</div>" +
+          '<div class="sheet__face sheet__back"></div>';
+        stack.appendChild(sheet);
+      });
+
+      const sheets = Array.prototype.slice.call(stack.children);
+      const loaded = new Array(total).fill(false);
+
+      function ensureLoaded(i) {
+        if (i < 0 || i >= total || loaded[i]) return;
+        loaded[i] = true;
+        const sheet = sheets[i];
+        const frame = sheet.querySelector(".photo-frame");
+        const img = sheet.querySelector("img");
+        img.addEventListener("load", function () { frame.classList.remove("is-loading"); });
+        img.addEventListener("error", function () { frame.classList.remove("is-loading"); });
+        toDisplaySrc(items[i].src).then(function (url) {
+          img.src = url;
+        });
+      }
+
+      function render() {
+        sheets.forEach(function (sheet, i) {
+          sheet.classList.toggle("is-active", i === current);
+          sheet.style.zIndex = String(i === current ? total : 1);
+        });
+        ensureLoaded(current);
+        ensureLoaded(current + 1);
+        ensureLoaded(current - 1);
+        indicator.textContent = current + 1 + " / " + total;
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === total - 1;
+      }
+
+      prevBtn.addEventListener("click", function () {
+        if (current > 0) { current--; render(); }
+      });
+      nextBtn.addEventListener("click", function () {
+        if (current < total - 1) { current++; render(); }
+      });
+
+      render();
+    }
+  }
+
+  function formatDate(date) {
+    const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+      "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+    return date.getDate() + " de " + meses[date.getMonth()] + " de " + date.getFullYear();
+  }
 
   /* ---- Partículas / pequeñas luces ---- */
   initParticles();
