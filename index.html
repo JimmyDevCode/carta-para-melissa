@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#111014" />
+  <title>Nuestro primer capítulo · Melissa</title>
+  <meta name="description" content="Una pequeña historia para Melissa. Nuestro primer mes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== Capa de partículas / luces ===== -->
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <!-- ===== Barra de progreso de lectura ===== -->
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <!-- ===== PANTALLA DE ENTRADA ===== -->
+  <section id="intro" class="intro">
+    <div class="intro__inner">
+      <p class="intro__name reveal-now">Melissa <span class="heart">❤</span></p>
+      <h1 class="intro__title reveal-now">Nuestro primer capítulo</h1>
+      <p class="intro__date reveal-now">22.09.2026</p>
+      <button id="openBtn" class="btn btn--ghost reveal-now" type="button">
+        Abrir nuestra historia <span class="arrow">→</span>
+      </button>
+    </div>
+    <div class="intro__hint" aria-hidden="true">hecho para ti</div>
+  </section>
+
+  <!-- ===== CONTENIDO PRINCIPAL ===== -->
+  <main id="story" class="story" hidden>
+
+    <!-- SECCIÓN 1 — INTRODUCCIÓN -->
+    <section class="section section--intro" data-theme="ivory">
+      <div class="wrap">
+        <p class="lead reveal">
+          “No sé exactamente en qué momento empezaste a convertirte en alguien tan
+          importante para mí, pero sí sé que hoy quiero celebrar que llevamos un mes
+          escribiendo esto juntos.”
+        </p>
+        <div class="stats reveal">
+          <div class="stat">
+            <span class="stat__num">1</span>
+            <span class="stat__label">mes</span>
+          </div>
+          <span class="stat__sep">·</span>
+          <div class="stat">
+            <span class="stat__num">30</span>
+            <span class="stat__label">días</span>
+          </div>
+          <span class="stat__sep">·</span>
+          <div class="stat">
+            <span class="stat__num">∞</span>
+            <span class="stat__label">momentos por vivir</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2 — CAPÍTULO 01 -->
+    <section class="section section--chapter" data-theme="dark">
+      <div class="wrap">
+        <p class="chapter-tag reveal">Capítulo 01</p>
+        <h2 class="chapter-title reveal">El comienzo</h2>
+        <figure class="feature-photo reveal">
+          <div class="photo-frame photo-frame--large">
+            <!-- Reemplaza el src por vuestra foto -->
+            <img src="img/foto-principal.jpg" alt="Nuestra primera foto juntos"
+                 onerror="this.classList.add('is-empty')" />
+            <span class="photo-placeholder">Coloca aquí<br>vuestra foto</span>
+          </div>
+        </figure>
+        <p class="body reveal">
+          “Todo empezó con pequeños momentos que, sin darnos cuenta, terminaron
+          convirtiéndose en algo mucho más especial.”
+        </p>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 3 — CAPÍTULO 02, GALERÍA -->
+    <section class="section section--gallery" data-theme="beige">
+      <div class="wrap">
+        <p class="chapter-tag reveal">Capítulo 02</p>
+        <h2 class="chapter-title reveal">Nuestros pequeños momentos</h2>
+        <p class="body body--center reveal">
+          “Porque probablemente algún día olvidemos qué hicimos exactamente cada día,
+          pero quiero recordar cómo nos sentimos estando juntos.”
+        </p>
+
+        <div class="polaroids">
+          <figure class="polaroid reveal" style="--tilt:-4deg">
+            <div class="photo-frame"><img src="img/momento-1.jpg" alt="Momento 1" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 1</span></div>
+            <figcaption>Un momento nuestro</figcaption>
+          </figure>
+          <figure class="polaroid reveal" style="--tilt:3deg">
+            <div class="photo-frame"><img src="img/momento-2.jpg" alt="Momento 2" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 2</span></div>
+            <figcaption>Un momento nuestro</figcaption>
+          </figure>
+          <figure class="polaroid reveal" style="--tilt:-2deg">
+            <div class="photo-frame"><img src="img/momento-3.jpg" alt="Momento 3" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 3</span></div>
+            <figcaption>Un momento nuestro</figcaption>
+          </figure>
+          <figure class="polaroid reveal" style="--tilt:4deg">
+            <div class="photo-frame"><img src="img/momento-4.jpg" alt="Momento 4" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 4</span></div>
+            <figcaption>Un momento nuestro</figcaption>
+          </figure>
+          <figure class="polaroid reveal" style="--tilt:-3deg">
+            <div class="photo-frame"><img src="img/momento-5.jpg" alt="Momento 5" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 5</span></div>
+            <figcaption>Un momento nuestro</figcaption>
+          </figure>
+          <figure class="polaroid reveal" style="--tilt:2deg">
+            <div class="photo-frame"><img src="img/momento-6.jpg" alt="Momento 6" onerror="this.classList.add('is-empty')" /><span class="photo-placeholder">Foto 6</span></div>
+            <figcaption>Un momento nuestro</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4 — CAPÍTULO 03, TÚ -->
+    <section class="section section--you" data-theme="dark">
+      <div class="wrap">
+        <p class="chapter-tag reveal">Capítulo 03</p>
+        <h2 class="chapter-title reveal">Tú</h2>
+        <div class="likes">
+          <p class="like reveal">“Me gusta cómo eres cuando estás feliz.”</p>
+          <p class="like reveal">“Me gusta cuando te emocionas contando algo.”</p>
+          <p class="like reveal">“Me gusta molestarte y que me sigas el juego. 😂”</p>
+          <p class="like reveal">“Me gusta que seas tú, incluso en esas pequeñas cosas que probablemente ni notas.”</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 5 — SECRETOS -->
+    <section class="section section--secrets" data-theme="ivory">
+      <div class="wrap">
+        <h2 class="chapter-title reveal">Hay algunas cosas que todavía no sabes…</h2>
+        <div class="secret-card reveal">
+          <p id="secretText" class="secret-text">Pulsa el botón para descubrir un pequeño secreto.</p>
+        </div>
+        <button id="secretBtn" class="btn btn--solid reveal" type="button">Descubrir</button>
+        <p id="secretCount" class="secret-count reveal" aria-hidden="true"></p>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 6 — SOUNDTRACK -->
+    <section class="section section--music" data-theme="dark">
+      <div class="wrap">
+        <h2 class="chapter-title reveal">Si nuestra historia tuviera soundtrack…</h2>
+        <ul class="playlist">
+          <li class="track reveal">
+            <span class="track__index">01</span>
+            <div class="track__body">
+              <p class="track__name">[ Nombre de la canción ]</p>
+              <p class="track__artist">[ Artista ]</p>
+              <p class="track__note">“Porque me recuerda a aquella vez que…”</p>
+            </div>
+          </li>
+          <li class="track reveal">
+            <span class="track__index">02</span>
+            <div class="track__body">
+              <p class="track__name">[ Nombre de la canción ]</p>
+              <p class="track__artist">[ Artista ]</p>
+              <p class="track__note">“Porque suena a nosotros cuando…”</p>
+            </div>
+          </li>
+          <li class="track reveal">
+            <span class="track__index">03</span>
+            <div class="track__body">
+              <p class="track__name">[ Nombre de la canción ]</p>
+              <p class="track__artist">[ Artista ]</p>
+              <p class="track__note">“Porque quiero dedicártela por…”</p>
+            </div>
+          </li>
+          <li class="track reveal">
+            <span class="track__index">04</span>
+            <div class="track__body">
+              <p class="track__name">[ Nombre de la canción ]</p>
+              <p class="track__artist">[ Artista ]</p>
+              <p class="track__note">“Porque siempre que la escucho pienso en…”</p>
+            </div>
+          </li>
+        </ul>
+        <p class="hint-note reveal">Reemplaza estos espacios con nuestras canciones.</p>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 7 — PLANES -->
+    <section class="section section--plans" data-theme="beige">
+      <div class="wrap">
+        <h2 class="chapter-title reveal">Capítulos que todavía nos faltan</h2>
+        <ul class="checklist">
+          <li class="check reveal"><span class="box" aria-hidden="true"></span>Viajar juntos</li>
+          <li class="check reveal"><span class="box" aria-hidden="true"></span>Ver un amanecer</li>
+          <li class="check reveal"><span class="box" aria-hidden="true"></span>Conocer un lugar nuevo</li>
+          <li class="check reveal"><span class="box" aria-hidden="true"></span>Hacer muchas fotos</li>
+          <li class="check reveal"><span class="box" aria-hidden="true"></span>Tener una aventura improvisada</li>
+          <li class="check reveal"><span class="box" aria-hidden="true"></span>Crear recuerdos que todavía no existen</li>
+        </ul>
+        <p class="hint-note reveal">Los iremos marcando juntos. ✓</p>
+      </div>
+    </section>
+
+    <!-- SECCIÓN FINAL -->
+    <section class="section section--final" data-theme="dark">
+      <div class="wrap">
+        <p class="final__hi reveal">Melissa,</p>
+        <p class="final__letter reveal">
+          “Hoy cumplimos nuestro primer mes. Puede parecer poco tiempo, pero ha sido
+          suficiente para darme cuenta de que quiero seguir descubriendo todo lo que
+          podemos construir juntos.
+        </p>
+        <p class="final__letter reveal">Gracias por este primer capítulo.”</p>
+        <h2 class="final__big reveal">Feliz primer mes <span class="heart">❤</span></h2>
+        <p class="final__sign reveal">— Jimmy</p>
+        <p class="final__date reveal">22 · 09 · 2026</p>
+        <p class="final__tag reveal">Esto recién comienza.</p>
+        <p class="final__ps reveal">Te quiero, Melissa. <span class="heart">❤</span></p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
